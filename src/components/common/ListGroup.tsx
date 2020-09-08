@@ -7,7 +7,6 @@ export const ListGroup = ({
   valueProperty,
   selectedItem
 }: any) => {
-
   return (
     <>
       <ul className="list-group">

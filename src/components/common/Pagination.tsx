@@ -18,6 +18,7 @@ export const Pagination = ({
           {pages.map((page) => {
             return (
               <li
+                key={page}
                 className={
                   page === currentPage ? "page-item active" : "page-item"
                 }
