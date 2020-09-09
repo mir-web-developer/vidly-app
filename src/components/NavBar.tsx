@@ -35,6 +35,9 @@ export const NavBar = () => {
               <NavLink className="nav-link" to="/rentals">
                 Rentals
               </NavLink>
+              <NavLink className="nav-link" to="/login">
+                Login
+              </NavLink>
             </li>
           </ul>
         </div>
