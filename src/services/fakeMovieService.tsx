@@ -1,4 +1,4 @@
-const movies = [
+let movies = [
   {
     id: 1,
     title: "title",
@@ -50,6 +50,32 @@ const movies = [
   }
 ];
 
+// export const addMovies = (movie) => {
+//   const newMovie = {
+//     id: 7,
+//     title: movie.title,
+//     genre: { _id: 7, name: movie.genre },
+//     numberInStock: movie.numberInStock,
+//     dailyRentalRate: movie.rate,
+//     publishDate: "20.20"
+//   };
+//   return movies.push(newMovie);
+// };
+
+export const saveMovie = (movie: any) => {
+  let movieInDb = movies.find((m) => m.id === movie.id) || {};
+  movieInDb.title = movie.title;
+  movieInDb.genre.name = movie.genre;//<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!
+  movieInDb.numberInStock = movie.numberInStock;
+  movieInDb.dailyRentalRate = movie.rate;
+  if (!movieInDb.id) {
+    movieInDb.id = Date.now().toString();
+    movies.push(movieInDb);
+  }
+};
 export const getMovies = () => {
   return movies;
+};
+export const getMovie = (id: any) => {
+  return movies.find((movie) => movie.id === id);
 };

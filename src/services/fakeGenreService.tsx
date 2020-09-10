@@ -1,10 +1,9 @@
-export const genres =[
-  {_id:"saldkfjaslkdj" ,name: "Action"},
-  {_id:"kdjfaslksdajkf" ,name: "Comedy"},
-  {_id:"kasdjf;kl" ,name: "Thriller"}
-  
-]
+export const genres = [
+  { _id: "1", name: "Action" },
+  { _id: "2", name: "Comedy" },
+  { _id: "3", name: "Thriller" }
+];
 
-export function getGenres () {
-return genres.filter(g => g)
+export function getGenres() {
+  return genres.filter((g) => g);
 }

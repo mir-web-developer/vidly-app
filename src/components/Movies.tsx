@@ -5,14 +5,17 @@ import { Pagination } from "./common/Pagination";
 import { Paginate } from "../utils/Paginate";
 import { ListGroup } from "../components/common/ListGroup";
 import { getGenres } from "../services/fakeGenreService";
+import { SearchBox } from "./common/SearchBox";
 import _ from "lodash";
+import { NavLink } from "react-router-dom";
 export const Movies = () => {
   const [state, setState] = useState({
+    searchQuery: "",
     movies: [],
     genres: [],
     pageSize: 4,
     currentPage: 1,
-    selectedGenre: {},
+    selectedGenre: null,
     sortColumn: { path: "title", order: "asc" }
   });
 
@@ -24,10 +27,14 @@ export const Movies = () => {
       movies: allMovies,
       sortColumn
     } = state;
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter((m) => m.genre.name === selectedGenre.name)
-        : allMovies;
+
+    let filtered = allMovies;
+    if (searchQuery) {
+      filtered = allMovies.filter((m) =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    } else if (selectedGenre && selectedGenre._id)
+      filtered = allMovies.filter((m) => m.genre._id === selectedGenre._id);
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = Paginate(sorted, currentPage, pageSize);
@@ -35,7 +42,12 @@ export const Movies = () => {
   };
   const handleGenreSelect = (genre: any) => {
     console.log(genre + " selected");
-    setState({ ...state, selectedGenre: genre, currentPage: 1 });
+    setState({
+      ...state,
+      selectedGenre: genre,
+      currentPage: 1,
+      searchQuery: ""
+    });
   };
 
   useEffect(() => {
@@ -69,10 +81,18 @@ export const Movies = () => {
     console.log(page);
     setState({ ...state, currentPage: page });
   };
-  const { pageSize, currentPage, sortColumn } = state;
+  const { pageSize, currentPage, sortColumn, searchQuery } = state;
 
   const handleSort = (sortColumn: any) => {
     setState({ ...state, sortColumn });
+  };
+  const handleSearch = (query) => {
+    setState({
+      ...state,
+      searchQuery: query,
+      selectedGenre: null,
+      currentPage: 1
+    });
   };
 
   const { totalCount, data: movies } = getPagedData();
@@ -86,7 +106,11 @@ export const Movies = () => {
         />
       </div>
       <div className="col">
+        <NavLink to="/movies/new">
+          <button className="btn btn-primary mb-3">New Movie</button>
+        </NavLink>
         <p>Showing {totalCount} movies in the database</p>
+        <SearchBox value={searchQuery} onChange={handleSearch} />
         <MoviesTable
           sortColumn={sortColumn}
           movies={movies}

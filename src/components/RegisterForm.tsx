@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { Input } from "./common/Input";
 import Joi from "joi-browser";
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const [state, setState] = useState({
-    account: { username: "", password: "" },
+    account: { username: "", password: "", name: "" },
     errors: {}
   });
 
   const schema = {
-    username: Joi.string().required().label("Username"),
-    password: Joi.string().required().label("Password")
+    username: Joi.string().required().email().label("Username"),
+    password: Joi.string().required().min(5).label("Password"),
+    name: Joi.string().required().label("Name")
   };
 
   const validate = () => {
@@ -46,7 +47,7 @@ export const LoginForm = () => {
   const { account, errors } = state;
   return (
     <div>
-      <h1> Login </h1>
+      <h1> Register </h1>
       <form onSubmit={handleSubmit}>
         <Input
           name="username"
@@ -62,8 +63,15 @@ export const LoginForm = () => {
           label="Password"
           error={errors.password}
         />
+        <Input
+          name="name"
+          value={account.name}
+          onChange={handleChange}
+          label="Name"
+          error={errors.name}
+        />
         <button disabled={validate()} className="btn btn-primary">
-          Login
+          Register
         </button>
       </form>
     </div>
